@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -9,11 +10,17 @@ import (
 	"time"
 )
 
-// Product 定义表结构
-type Product struct {
-	gorm.Model
-	Code  string
-	Price uint
+// User 定义表结构
+type User struct {
+	ID           uint
+	Name         string
+	Email        *string
+	Age          uint8
+	Birthday     *time.Time
+	MemberNumber sql.NullString
+	ActivatedAt  sql.NullTime
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 func main() {
@@ -43,25 +50,19 @@ func main() {
 
 	// 定义一个表结构 将表结构直接生成对应的表 - migrations
 	// 迁移 schema
-	err = db.AutoMigrate(&Product{}) // 此处应该有建表语句
+	err = db.AutoMigrate(&User{}) // 此处应该有建表语句
 	if err != nil {
-		return
+		panic(err)
 	}
-
-	// Create
-	db.Create(&Product{Code: "D42", Price: 100})
-
-	// Read
-	var product Product
-	db.First(&product, 1)                 // 根据整型主键查找
-	db.First(&product, "code = ?", "D42") // 查找 code 字段值为 D42 的记录
-
-	// Update - 将 product 的 price 更新为 200
-	db.Model(&product).Update("Price", 200)
-	// Update - 更新多个字段
-	db.Model(&product).Updates(Product{Price: 200, Code: "F42"}) // 仅更新非零值字段
-	db.Model(&product).Updates(map[string]interface{}{"Price": 200, "Code": "F42"})
-
-	// Delete - 删除 product
-	db.Delete(&product, 1)
+	//db.Create(&User{Name: "winnie"})
+	//db.Model(&User{ID: 1}).Update("Name", "")
+	db.Model(&User{ID: 1}).Updates(User{Name: ""}) //  UPDATE `users` SET `updated_at`='2023-01-02 14:51:55.691' WHERE `id` = 1
+	empty := ""
+	db.Model(&User{ID: 1}).Updates(User{Email: &empty}) // UPDATE `users` SET `email`='',`updated_at`='2023-01-02 14:51:
+	/*
+		Updates 语句不会更新零值，Update 语句会更新
+		解决仅更新非零值字段的方法有两种
+		1.将 string 值设置为 *string
+		2.使用 sql 的 NULLxxx 来解决
+	*/
 }

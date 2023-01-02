@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -9,11 +10,17 @@ import (
 	"time"
 )
 
-// Product 定义表结构
-type Product struct {
-	gorm.Model
-	Code  string
-	Price uint
+// User 定义表结构
+type User struct {
+	ID           uint
+	Name         string
+	Email        *string
+	Age          uint8
+	Birthday     *time.Time
+	MemberNumber sql.NullString
+	ActivatedAt  sql.NullTime
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 func main() {
@@ -41,27 +48,10 @@ func main() {
 		panic(err)
 	}
 
-	// 定义一个表结构 将表结构直接生成对应的表 - migrations
-	// 迁移 schema
-	err = db.AutoMigrate(&Product{}) // 此处应该有建表语句
-	if err != nil {
-		return
-	}
+	var user User
+	db.First(&user)
 
-	// Create
-	db.Create(&Product{Code: "D42", Price: 100})
-
-	// Read
-	var product Product
-	db.First(&product, 1)                 // 根据整型主键查找
-	db.First(&product, "code = ?", "D42") // 查找 code 字段值为 D42 的记录
-
-	// Update - 将 product 的 price 更新为 200
-	db.Model(&product).Update("Price", 200)
-	// Update - 更新多个字段
-	db.Model(&product).Updates(Product{Price: 200, Code: "F42"}) // 仅更新非零值字段
-	db.Model(&product).Updates(map[string]interface{}{"Price": 200, "Code": "F42"})
-
-	// Delete - 删除 product
-	db.Delete(&product, 1)
+	user.Name = "winnie test"
+	user.Age = 18
+	db.Save(&user) // save 方法是集 create 和 update 于一体的操作
 }

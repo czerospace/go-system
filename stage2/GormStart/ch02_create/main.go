@@ -9,11 +9,10 @@ import (
 	"time"
 )
 
-// Product 定义表结构
-type Product struct {
-	gorm.Model
-	Code  string
-	Price uint
+// User 定义表结构
+type User struct {
+	UserId uint   `gorm:"primarykey"`
+	Name   string `gorm:"column:user_name;type:varchar(50);index:idx_user_name"`
 }
 
 func main() {
@@ -43,25 +42,8 @@ func main() {
 
 	// 定义一个表结构 将表结构直接生成对应的表 - migrations
 	// 迁移 schema
-	err = db.AutoMigrate(&Product{}) // 此处应该有建表语句
+	err = db.AutoMigrate(&User{}) // 此处应该有建表语句
 	if err != nil {
-		return
+		panic(err)
 	}
-
-	// Create
-	db.Create(&Product{Code: "D42", Price: 100})
-
-	// Read
-	var product Product
-	db.First(&product, 1)                 // 根据整型主键查找
-	db.First(&product, "code = ?", "D42") // 查找 code 字段值为 D42 的记录
-
-	// Update - 将 product 的 price 更新为 200
-	db.Model(&product).Update("Price", 200)
-	// Update - 更新多个字段
-	db.Model(&product).Updates(Product{Price: 200, Code: "F42"}) // 仅更新非零值字段
-	db.Model(&product).Updates(map[string]interface{}{"Price": 200, "Code": "F42"})
-
-	// Delete - 删除 product
-	db.Delete(&product, 1)
 }
