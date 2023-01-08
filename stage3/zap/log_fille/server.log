@@ -1,0 +1,1 @@
+{"level":"info","ts":1673149267.588421,"caller":"log_fille/main.go:25","msg":"failed to fetch URL","url":"https://google.com","nums":3}
