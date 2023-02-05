@@ -24,7 +24,7 @@ func main() {
 	for i := 0; i < 10; i++ {
 		userSrvClient := proto.NewUserClient(conn)
 		rsp, err := userSrvClient.GetUserList(context.Background(), &proto.PageInfo{
-			Pn:    uint32(i),
+			Pn:    1,
 			PSize: 2,
 		})
 		if err != nil {
