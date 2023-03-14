@@ -22,7 +22,8 @@ func main() {
 	defer logger.Sync()
 
 	url := "https://google.com"
-	logger.Info("failed to fetch URL",
+	logger.Info(zap.Time(),
+		"failed to fetch URL",
 		zap.String("url", url),
 		zap.Int("nums", 3),
 	)

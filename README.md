@@ -1,6 +1,9 @@
 # go-system
- mooc class
+ mooc class basic
+## stage1
+Go 语法基础
 ## stage2
-Go微服务基础
+Go 微服务基础
 ## stage3
-微服务注册中心配置中心
+微服务注册中心 Consul
+配置中心    Nacos
