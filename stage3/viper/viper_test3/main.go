@@ -24,4 +24,6 @@ func main() {
 	}
 	fmt.Println(global.ServerConfig.ConsulInfo.Host)
 	fmt.Println(global.ServerConfig.ConsulInfo.Port)
+	fmt.Println(global.ServerConfig.NetInfo.Interface)
+	fmt.Println(global.ServerConfig.NetInfo.Subnet)
 }
