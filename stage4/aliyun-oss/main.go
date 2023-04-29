@@ -19,7 +19,8 @@ func main() {
 	accessKeySecret := ""
 	bucketName := ""
 	// <yourObjectName> 上传文件到OSS时需要指定包含文件后缀在内的完整路径，例如 abc/efg/123.jpg。
-	objectName := "niko/first.jpg" //斜线前面代表路径
+	// 斜线前面代表路径
+	objectName := "niko/first.jpg"
 	// <yourLocalFileName> 由本地文件路径加文件名包括后缀组成，例如 /users/local/myfile.txt。
 	localFileName := `C:\Users\czero\Pictures\hitgirl.webp`
 	// 创建OSSClient实例。
